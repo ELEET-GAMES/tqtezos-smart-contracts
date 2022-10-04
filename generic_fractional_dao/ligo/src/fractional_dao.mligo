@@ -62,7 +62,7 @@ type return = (operation list) * dao_storage
 
 [@inline]
 let assert_self_call () =
-  if Tezos.sender = Tezos.self_address
+  if Tezos.get_sender() = Tezos.get_self_address()
   then unit
   else failwith "UNVOTED_CALL"
 
@@ -102,7 +102,7 @@ let flush_expired (lambda, s : dao_lambda * dao_storage ) : dao_storage =
 let validate_permit (lambda, permit, vote_count 
     : dao_lambda * permit * nat) : address =
   let signed_data = Bytes.pack (
-    (Tezos.chain_id, Tezos.self_address),
+    (Tezos.chain_id, Tezos.get_self_address()),
     (vote_count, lambda)
   ) in
   if  Crypto.check permit.key permit.signature signed_data 
@@ -135,7 +135,7 @@ let execute_proposal (lambda, vote_key, s : dao_lambda * bytes * dao_storage)
 
 let vote (v, s : vote * dao_storage) : return =
   let voter = match v.permit with
-  | None -> Tezos.sender
+  | None -> Tezos.get_sender()
   | Some p -> validate_permit (v.lambda, p, s.vote_count)
   in
   let voter_stake = get_voter_stake (voter, s.ownership_token.ledger) in

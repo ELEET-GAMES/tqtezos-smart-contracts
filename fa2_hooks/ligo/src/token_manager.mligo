@@ -122,7 +122,7 @@ let burn_update_total_supply (txs, total_supplies
     match supply_opt with
     | None -> (failwith fa2_token_undefined : token_total_supply)
     | Some ts ->
-      let new_s = match Michelson.is_nat (ts - tx.amount) with
+      let new_s = match is_nat (ts - tx.amount) with
       | None -> (failwith fa2_insufficient_balance : nat)
       | Some s -> s
       in
@@ -151,13 +151,13 @@ let token_manager (param, s : token_manager * multi_token_storage)
 
   | Mint_tokens param -> 
     let new_s = mint_tokens (param, s) in
-    let tx_param = mint_txs_to_transfer_descriptor_param (param, Tezos.self_address) in
+    let tx_param = mint_txs_to_transfer_descriptor_param (param, Tezos.get_self_address()) in
     let ops = get_owner_hook_ops_for (tx_param, s.permissions) in
     ops, new_s
 
   | Burn_tokens param -> 
     let new_s = burn_tokens (param, s) in
-    let tx_param = burn_txs_to_transfer_descriptor_param (param, Tezos.self_address) in
+    let tx_param = burn_txs_to_transfer_descriptor_param (param, Tezos.get_self_address()) in
     let ops = get_owner_hook_ops_for (tx_param, s.permissions) in
     ops, new_s
 

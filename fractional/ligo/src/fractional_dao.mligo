@@ -42,7 +42,7 @@ type vote_transfer_param =
 
 (* permit context:
 Tezos.chain_id,
-Tezos.self_address,
+Tezos.get_self_address(),
 storage.vote_nonce,
 *)
 
@@ -136,7 +136,7 @@ let set_ownership (p, s : set_ownership_param * dao_storage) : dao_storage =
 
 let validate_permit (vote, permit, nonce : transfer_vote * permit * nat) : address =
   let signed_data = Bytes.pack (
-    (Tezos.chain_id, Tezos.self_address),
+    (Tezos.chain_id, Tezos.get_self_address()),
     (nonce, vote)
   ) in
   if Crypto.check permit.key permit.signature signed_data
@@ -145,7 +145,7 @@ let validate_permit (vote, permit, nonce : transfer_vote * permit * nat) : addre
 
 let make_transfer (vote : transfer_vote): operation  =
   let tx : transfer = {
-      from_ = Tezos.self_address;
+      from_ = Tezos.get_self_address();
       txs = [{to_ = vote.to_; token_id = vote.nft_token.token_id ; amount = 1n; }];
     } in
   let fa2_entry : ((transfer list) contract) option = 
@@ -172,7 +172,7 @@ let clean_after_transfer (vote, ownership_token, s
 let vote_transfer (p, s : vote_transfer_param * dao_storage)
     : operation list * dao_storage =
   let voter = match p.permit with
-  | None -> Tezos.sender
+  | None -> Tezos.get_sender()
   | Some permit -> validate_permit (p.vote, permit, s.vote_nonce)
   in
   let ownership = match Big_map.find_opt p.vote.nft_token s.owned_nfts with

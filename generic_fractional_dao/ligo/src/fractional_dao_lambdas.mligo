@@ -8,7 +8,7 @@ to generate actual lambda code enclosing the parameters
 let set_dao_voting_threshold (old_threshold, new_threshold : nat * nat): dao_lambda =
   fun (u : unit) -> (
     let dao_entry : set_voting_threshold_param contract option =
-      Tezos.get_entrypoint_opt "%set_voting_threshold" Tezos.self_address in
+      Tezos.get_entrypoint_opt "%set_voting_threshold" Tezos.get_self_address() in
     match dao_entry with
     | None -> (failwith "NO_DAO_SET_VOTING_THRESHOLD" : operation list)
     | Some dao ->
@@ -22,7 +22,7 @@ let set_dao_voting_threshold (old_threshold, new_threshold : nat * nat): dao_lam
 let set_dao_voting_period (old_period, new_period : nat * nat): dao_lambda =
   fun (u : unit) -> (
     let dao_entry : set_voting_period_param contract option =
-      Tezos.get_entrypoint_opt "%set_voting_period" Tezos.self_address in
+      Tezos.get_entrypoint_opt "%set_voting_period" Tezos.get_self_address() in
     match dao_entry with
     | None -> (failwith "NO_DAO_SET_VOTING_PERIOD" : operation list)
     | Some dao ->

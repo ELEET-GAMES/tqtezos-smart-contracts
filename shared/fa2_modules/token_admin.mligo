@@ -43,10 +43,10 @@ let confirm_new_admin (s : token_admin_storage) : token_admin_storage =
   match s.pending_admin with
   | None -> (failwith "NO_PENDING_ADMIN" : token_admin_storage)
   | Some pending ->
-    if Tezos.sender = pending
+    if Tezos.get_sender() = pending
     then { s with 
       pending_admin = (None : address option);
-      admin = Tezos.sender;
+      admin = Tezos.get_sender();
     }
     else (failwith "NOT_A_PENDING_ADMIN" : token_admin_storage)
 

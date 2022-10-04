@@ -149,7 +149,7 @@ const signPermit = async (
   const { vote_count } = await dao.storage<DaoStorage>();
   /*
   Bytes.pack (
-    (Tezos.chain_id, Tezos.self_address),
+    (Tezos.chain_id, Tezos.get_self_address()),
     (vote_count, lambda)
   )
   */
@@ -195,7 +195,7 @@ const signPermitV2 = async (
   const { vote_count } = await dao.storage<DaoStorage>();
   /*
   Bytes.pack (
-    (Tezos.chain_id, Tezos.self_address),
+    (Tezos.chain_id, Tezos.get_self_address()),
     (vote_count, lambda)
   )
   */

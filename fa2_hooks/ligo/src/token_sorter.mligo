@@ -21,7 +21,7 @@ type tokens_to_transfer = (nat, nat) map
 
 let inc_pending_balance (s, tx : dispatch_table * transfer_destination_descriptor)
     : dispatch_table =
-  let key = (Tezos.sender, tx.token_id) in
+  let key = (Tezos.get_sender(), tx.token_id) in
   let info_opt = Big_map.find_opt key s in
   match info_opt with
   | None -> (failwith "UNKNOWN TOKEN" : dispatch_table)
@@ -38,7 +38,7 @@ let tokens_received (p, storage
           match tx.to_ with
           | None -> s
           | Some to_ ->
-            if to_ <> Tezos.self_address
+            if to_ <> Tezos.get_self_address()
             then s
             else inc_pending_balance (s, tx)
         ) td.txs s
@@ -73,7 +73,7 @@ let forward_tokens (p, storage : forward_param * dispatch_table)
   then ([] : operation list), new_s
   else
     let tx : transfer = {
-      from_ = Tezos.self_address;
+      from_ = Tezos.get_self_address();
       txs = tx_dests;
     } in
     let fa2_entry : ((transfer list) contract) option = 
