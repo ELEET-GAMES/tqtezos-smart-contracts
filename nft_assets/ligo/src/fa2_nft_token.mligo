@@ -73,7 +73,7 @@ let transfer (txs, validate_op, ops_storage, ledger
             if o <> tx.from_
             then (failwith fa2_insufficient_balance : ledger)
             else 
-              let u = validate_op (o, Tezos.get_sender(), dst.token_id, ops_storage) in
+              let _u = validate_op (o, Tezos.get_sender(), dst.token_id, ops_storage) in
               Big_map.update dst.token_id (Some dst.to_) ll
       ) tx.txs l
   )
@@ -85,7 +85,7 @@ let transfer (txs, validate_op, ops_storage, ledger
 let find_token_def (tid, token_defs : token_id * (token_def set)) : token_def =
   let tdef = Set.fold (fun (res, d : (token_def option) * token_def) ->
     match res with
-    | Some r -> res
+    | Some _r -> res
     | None ->
       if tid >= d.from_ && tid < d.to_
       then  Some d
@@ -134,7 +134,7 @@ let fa2_main (param, storage : fa2_entry_points * nft_token_storage)
     | Fa2 fa2 -> fa2_main (fa2, storage)
     | Token_metadata p ->
       let metas = get_metadata (p.token_ids, storage.metadata) in
-      let u = p.handler metas in
+      let _u = p.handler metas in
       ([] : operation list), storage
 
 

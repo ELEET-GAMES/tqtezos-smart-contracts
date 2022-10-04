@@ -62,7 +62,7 @@ let pause (tokens, s: (pause_param list) * token_admin_storage) : token_admin_st
   { s with paused = new_paused; }
 
 let fail_if_not_admin (a : token_admin_storage) : unit =
-  if sender <> a.admin
+  if Tezos.get_sender() <> a.admin
   then failwith "NOT_AN_ADMIN"
   else unit
 
