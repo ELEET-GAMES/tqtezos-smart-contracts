@@ -1,3 +1,4 @@
+build/*.tz
 *.pp.mligo
 *.pp.ligo
 node_modules
